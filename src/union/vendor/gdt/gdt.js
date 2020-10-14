@@ -2,6 +2,7 @@
 import logger from '../../../logger';
 import { UNION_TIMEOUT } from '../../index';
 import GdtManager from './GdtManager';
+import utils from '../../../utils/browser';
 
 /**
  * 渲染逻辑上有点怪异，必须先定义TencentGDT，再加载js。js而且不能重复加载。
@@ -13,6 +14,12 @@ export default Union => {
     src: '//qzs.qq.com/qzone/biz/res/i.js',
     sandbox: false,
     onInit(data, { onLoaded, onTimeOut }) {
+      if (!utils.isWechat) {
+        this.status = '1';
+        onTimeOut('10005');
+        Union.vendorLoaded[this.name] = 'destroyed';
+        return null;
+      }
       var timeout = setTimeout(() => {
         console.log('timeout');
         onTimeOut('10002');

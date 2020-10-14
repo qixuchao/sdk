@@ -122,11 +122,12 @@ export default class Slot {
 
     this.consumers = slotConfig.slotBidding;
 
+    this.consumerLength = this.consumers && this.consumers.length;
+
     this.consumerMaxWeight = getMaxConsumerWeight(this.consumers);
 
     this.loadedConsumers = [];
 
-    this.consumerLength = this.consumers && this.consumers.length;
     this.completeNumber = 0;
 
     // 已经加载消耗方个数

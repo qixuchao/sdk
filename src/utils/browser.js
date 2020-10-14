@@ -4,5 +4,6 @@ const ua = window.navigator.userAgent;
 export default {
   isMobile: /(iPhone|iPod|Android|ios|mobile)/i.test(ua),
   isAndroid: /Android|Linux/.test(ua),
-  isIos: /\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)
+  isIos: /\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua),
+  isWechat: /MicroMessenger/i.test(ua)
 };

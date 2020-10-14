@@ -23,6 +23,8 @@ export const ERROR_TYPE = {
   10001: 'js加载失败',
   10002: '获取广告超时',
   10003: '广告异常',
+  10004: '广告容器不存在',
+  10005: '非广告渲染环境',
   20000: '广点通重复加载广告失败'
 };
 
@@ -247,6 +249,7 @@ export default class Union extends Event {
       this.callHook('onMounted');
       this.callHook('onShow');
     } else {
+      this.logError('10004');
       console.error(`Slot 【${selector}】 does not exist`);
     }
   }
