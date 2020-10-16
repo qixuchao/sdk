@@ -1,6 +1,4 @@
 import { each } from '../../../utils/index';
-import Union from '../../index';
-import MP from '../../../Mp';
 
 let doClick;
 let onClose;
@@ -10,8 +8,9 @@ let onClose;
  * 再次加载广告。同时增加一个广告位容器和广告位对应的功能
  */
 class GdtManager {
-  constructor() {
+  constructor(config) {
     window.TencentGDT = window.TencentGDT || [];
+    this.config = config;
     this.slotMap = {};
     this.init();
   }
@@ -22,7 +21,7 @@ class GdtManager {
           if (consumer.consumer.consumerType === 'gdt') {
             this.slotMap[consumer.consumer.consumerSlotId] = {
               consumerSlotId: consumer.consumer.consumerSlotId,
-              appid: MP.MPConfig.gdtAppId,
+              appid: this.config.gdtAppId,
               status: 0
             };
           }
@@ -70,7 +69,7 @@ class GdtManager {
       console.error(`广点通消耗方id不存在${consumerSlotId}`);
     }
   }
-  bindEvent() {
+  bindEvent(Union) {
     if (doClick) {
       return;
     }
@@ -104,9 +103,9 @@ class GdtManager {
 }
 
 let gdtManager;
-export default () => {
+export default config => {
   if (!gdtManager) {
-    gdtManager = new GdtManager();
+    gdtManager = new GdtManager(config);
   }
   return gdtManager;
 };

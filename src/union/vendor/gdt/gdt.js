@@ -2,7 +2,7 @@
 import logger from '../../../logger';
 import { UNION_TIMEOUT } from '../../index';
 import GdtManager from './GdtManager';
-import utils from '../../../utils/browser';
+import { isTencentBrowser } from '../../../utils/browser';
 
 /**
  * 渲染逻辑上有点怪异，必须先定义TencentGDT，再加载js。js而且不能重复加载。
@@ -14,7 +14,7 @@ export default Union => {
     src: '//qzs.qq.com/qzone/biz/res/i.js',
     sandbox: false,
     onInit(data, { onLoaded, onTimeOut }) {
-      if (!(utils.isWechat || utils.isQQ || utils.isQQBrowser)) {
+      if (!isTencentBrowser) {
         this.status = '11';
         onTimeOut('10005');
         Union.vendorLoaded[this.name] = 'invalid';
@@ -27,7 +27,7 @@ export default Union => {
         timeout = null;
       }, UNION_TIMEOUT);
 
-      GdtManager().bindSlot(data.consumerSlotId, this.id, status => {
+      GdtManager(this.config).bindSlot(data.consumerSlotId, this.id, status => {
         clearInterval(timeout);
         if (status) {
           onLoaded();
@@ -40,7 +40,7 @@ export default Union => {
     },
     onBeforeMount() {},
     onMounted() {
-      GdtManager().bindEvent();
+      GdtManager().bindEvent(Union);
     },
     onShow() {
       if (window.GDT && window.GDT.getPosData) {

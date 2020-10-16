@@ -154,10 +154,11 @@ export default class Union extends Event {
    *
    * @param {Object} data
    */
-  run(data = {}, slotContainer) {
+  run(data = {}, slotContainer, config) {
     this.getContainer(slotContainer);
 
     this.data = data;
+    this.config = config;
     console.log('run');
     const onInit = () => {
       this.log('bid');
@@ -266,8 +267,10 @@ export default class Union extends Event {
   onClose() {
     this.trigger('close');
   }
-  reload(slotContainerSeletor) {
-    this.destroy();
+  reload(slotContainerSeletor, currentContainer) {
+    if (slotContainerSeletor === currentContainer) {
+      this.destroy();
+    }
     this.getContainer(document.querySelector(slotContainerSeletor));
     this.status = '7';
   }

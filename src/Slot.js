@@ -182,7 +182,7 @@ export default class Slot {
               callFunction(this.slotConfig.onClose);
             });
 
-          union.run(con, $container);
+          union.run(con, $container, this.config);
         } else {
           console.error(
             `Union 【${con.consumer.consumerType}】is not register`
@@ -245,9 +245,11 @@ export default class Slot {
       }
     }
   }
-  reload() {
+  reload(container) {
     if (this.winner) {
-      this.winner.reload(this.container);
+      const currentContainer = this.container;
+      this.container = container;
+      this.winner.reload(this.container, currentContainer);
     }
     this.distribute();
     this.status = '7';

@@ -7,13 +7,6 @@ import Slot from './Slot';
 
 class Mp {
   Ver = '__VERSION__';
-
-  /**
-   * @type Object
-   * 存储媒体相关的配置信息,方便在各个媒体中取相关信息(媒体id)
-   */
-  static MPConfig = {};
-
   constructor(slots) {
     // 广告位实例对象
     this.slots = {};
@@ -30,8 +23,6 @@ class Mp {
     this.MEDIA_CONFIG = {};
 
     this.config = window[MEDIA_CONFIG_NAME].config || {};
-
-    Mp.MPConfig = this.config;
 
     this.parseMediaConfig(window[MEDIA_CONFIG_NAME]);
 
@@ -200,7 +191,7 @@ class Mp {
   fillAd(container, slotConfig, force, options) {
     // 强制渲染先移除前一个广告
     if (this.slots[slotConfig.id] && force) {
-      this.slots[slotConfig.id] = this.slots[slotConfig.id].reload();
+      this.slots[slotConfig.id] = this.slots[slotConfig.id].reload(container);
     } else {
       this.slots[slotConfig.id] = new Slot(
         container,
