@@ -1,4 +1,6 @@
 import { each } from '../../../utils/index';
+import Union from '../../index';
+import MP from '../../../Mp';
 
 let doClick;
 let onClose;
@@ -20,7 +22,7 @@ class GdtManager {
           if (consumer.consumer.consumerType === 'gdt') {
             this.slotMap[consumer.consumer.consumerSlotId] = {
               consumerSlotId: consumer.consumer.consumerSlotId,
-              appid: consumer.consumer.appId || 1110655203,
+              appid: MP.MPConfig.gdtAppId,
               status: 0
             };
           }
@@ -68,7 +70,7 @@ class GdtManager {
       console.error(`广点通消耗方id不存在${consumerSlotId}`);
     }
   }
-  bindEvent(Union) {
+  bindEvent() {
     if (doClick) {
       return;
     }

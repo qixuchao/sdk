@@ -1,5 +1,5 @@
 /* global window */
-import { addParam, macroReplace, jsonp, each } from '../../utils/index';
+import { macroReplace, jsonp, each } from '../../utils/index';
 import { UNION_TIMEOUT } from '../index';
 
 const url = 'https://g.fancyapi.com/s2s';
@@ -18,7 +18,7 @@ export default Union => {
 
       const params = {
         ip: 'client',
-        mid: data.appId || 209,
+        mid: 209,
         si: data.consumerSlotId,
         rr: window.location.href,
         secure: 1, // https

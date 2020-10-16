@@ -14,7 +14,8 @@ const STATUS = {
   1: 'loaded',
   2: 'loadError',
   3: 'mounted',
-  10: 'destroyed'
+  10: 'destroyed',
+  11: 'invalid'
 };
 
 // 渲染广告过程中的错误状态
@@ -128,7 +129,7 @@ export default class Union extends Event {
 
   onTimeOut = (errorCode = '10002') => {
     console.log('timeout');
-    if (this.status === '1') {
+    if (this.status === '1' || this.status === '11') {
       this.status = '10';
       this.logError(errorCode);
       this.trigger('complete');

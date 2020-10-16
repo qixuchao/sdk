@@ -14,11 +14,11 @@ export default Union => {
     src: '//qzs.qq.com/qzone/biz/res/i.js',
     sandbox: false,
     onInit(data, { onLoaded, onTimeOut }) {
-      if (!utils.isWechat) {
-        this.status = '1';
+      if (!(utils.isWechat || utils.isQQ || utils.isQQBrowser)) {
+        this.status = '11';
         onTimeOut('10005');
-        Union.vendorLoaded[this.name] = 'destroyed';
-        return null;
+        Union.vendorLoaded[this.name] = 'invalid';
+        return;
       }
       var timeout = setTimeout(() => {
         console.log('timeout');
@@ -40,7 +40,7 @@ export default Union => {
     },
     onBeforeMount() {},
     onMounted() {
-      GdtManager().bindEvent(Union);
+      GdtManager().bindEvent();
     },
     onShow() {
       if (window.GDT && window.GDT.getPosData) {
