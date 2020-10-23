@@ -20,6 +20,14 @@ const SLOT_STATUS = {
   7: '重新请求'
 };
 
+// 消耗方优先级类型
+const PRIORITY_POLICY_TYPE = {
+  0: '时间优先',
+  1: '权重优先',
+  2: '随机', //暂时不考虑
+  3: '优先级顺序' // 1-10,值越小优先级越高
+};
+
 /**
  * 通过权重计算使用消耗方
  * @param {Array} consumers
@@ -39,10 +47,10 @@ const getMaxConsumerWeight = consumers => {
 
 const getConsumerByWeight = loadedConsumers => {
   let union = null;
-  let max = 0;
+  let max = 10;
 
   each(loadedConsumers, (con, index) => {
-    if (con.data.weight > max) {
+    if (con.data.weight < max) {
       union = con;
       max = con.data.weight;
     }
@@ -190,9 +198,9 @@ export default class Slot {
         }
       });
       this.timeouter = setTimeout(() => {
-        if (this.slotConfig.priorityPolicy === 2) {
+        if (this.slotConfig.priorityPolicy === 1) {
           this.race(getConsumerByWeightForRandom(this.loadedConsumers));
-        } else if (this.slotConfig.priorityPolicy === 1) {
+        } else if (this.slotConfig.priorityPolicy === 3) {
           this.race(getConsumerByWeight(this.loadedConsumers));
         }
       }, 3000);
@@ -214,11 +222,11 @@ export default class Slot {
     const priorityPolicy = this.slotConfig.priorityPolicy;
     if (
       priorityPolicy === 0 ||
-      (priorityPolicy === 1 && union.data.weight === this.consumerMaxWeight)
+      (priorityPolicy === 3 && union.data.weight === this.consumerMaxWeight)
     ) {
       this.race(union);
     } else if (
-      priorityPolicy === 2 &&
+      priorityPolicy === 1 &&
       this.loadedConsumers.length === this.consumerLength
     ) {
       this.race(getConsumerByWeightForRandom(this.loadedConsumers));
@@ -227,7 +235,6 @@ export default class Slot {
 
   /**
    * 真实填充 根据配置填充策略进行选择
-   *
    * 有竞速模式和随机模式
    * @param {Union} union
    */
@@ -244,15 +251,5 @@ export default class Slot {
         union.destroy();
       }
     }
-  }
-  reload(container) {
-    if (this.winner) {
-      const currentContainer = this.container;
-      this.container = container;
-      this.winner.reload(this.container, currentContainer);
-    }
-    this.distribute();
-    this.status = '7';
-    return this;
   }
 }
