@@ -36,9 +36,9 @@ const PRIORITY_POLICY_TYPE = {
  */
 
 const getMaxConsumerWeight = consumers => {
-  let maxWeight = 0;
-  each(consumers, ({ weight = 0 }) => {
-    if (weight > maxWeight) {
+  let maxWeight = 10;
+  each(consumers, ({ weight = 10 }) => {
+    if (weight && weight < maxWeight) {
       maxWeight = weight;
     }
   });
@@ -50,7 +50,7 @@ const getConsumerByWeight = loadedConsumers => {
   let max = 10;
 
   each(loadedConsumers, (con, index) => {
-    if (con.data.weight < max) {
+    if (con.data.weight && con.data.weight < max) {
       union = con;
       max = con.data.weight;
     }
@@ -168,6 +168,7 @@ export default class Slot {
             policyVersion: this.config.policyVersion,
             slotId: this.slotId,
             err: 0,
+            mediaId: this.config.mediaId,
             consumerType: con.consumer.consumerType,
             consumerSlotId: con.consumer.consumerSlotId
           };

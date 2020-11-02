@@ -25,17 +25,17 @@ export default Union => {
         clearInterval(timeout);
         timeout = null;
       }, UNION_TIMEOUT);
-      GdtManager(this.config).bindSlot(
+      GdtManager().bindSlot(
         data.consumerSlotId,
-        this.id,
-        (status, adInfo) => {
+        this,
+        (status, adInfo, code = '10000') => {
           clearInterval(timeout);
           if (status) {
             onLoaded(adInfo);
           } else {
             logger.info('无广告');
             console.log(timeout);
-            onTimeOut('10000');
+            onTimeOut(code);
           }
         }
       );
@@ -53,7 +53,11 @@ export default Union => {
         const materialReportData = {
           title: this.adInfo.txt,
           desc: this.adInfo.desc,
-          imgList
+          imgList,
+          slotId: this.requestData.slotId,
+          consumerSlotId: this.requestData.consumerSlotId,
+          consumerType: this.requestData.consumerType,
+          mediaId: this.requestData.mediaId
         };
         this.log('imp', { EXT: materialReportData });
       }
